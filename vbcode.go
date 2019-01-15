@@ -92,6 +92,9 @@ func (r *VBulletinRenderer) RenderNode(w io.Writer, node *blackfriday.Node, ente
 		r.lineBreak()
 
 	case blackfriday.List:
+		if entering && r.w.Len() > 0 {
+			r.lineBreak()
+		}
 		if node.ListFlags&blackfriday.ListTypeOrdered != 0 {
 			r.tagWithParameter("list", "1", entering)
 		} else if node.ListFlags&blackfriday.ListTypeDefinition != 0 {
@@ -146,7 +149,7 @@ func (r *VBulletinRenderer) RenderFooter(w io.Writer, ast *blackfriday.Node) {
 }
 
 func (r *VBulletinRenderer) lineBreak() {
-	r.w.Write([]byte{'\n','\r'})
+	r.w.Write([]byte{'\n'})
 }
 
 func (r *VBulletinRenderer) literal(text []byte) {
